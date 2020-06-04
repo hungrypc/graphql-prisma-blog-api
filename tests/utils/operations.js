@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost'
 
+// USER OPERATIONS
 const createUser = gql`
 mutation($data:CreateUserInput!) {
   createUser(
@@ -45,4 +46,71 @@ query {
 }
 `
 
-export { createUser, login, getProfile, getUsers }
+
+// POST OPERATIONS
+const getPosts = gql`
+  query {
+    posts {
+      id
+      title
+      body
+      published
+    }
+  }
+`
+
+const myPosts = gql`
+  query {
+    myPosts {
+      id
+      title
+      body
+      published
+    }
+  }
+`
+
+const createPost = gql`
+  mutation($data:CreatePostInput!) {
+    createPost(
+      data: $data
+    ) {
+      id
+      title
+      body
+      published
+    }
+  }
+`
+
+const updatePost = gql`
+  mutation($id:ID!, $data:UpdatePostInput!) {
+    updatePost(
+      id: $id,
+      data: $data
+    ) {
+      id
+      title
+      body
+      published
+    }
+  }
+`
+
+const deletePost = gql`
+  mutation($id:ID!) {
+    deletePost(
+      id: $id
+    ) {
+      id
+      title
+      body
+      published
+    }
+  }
+`
+
+export { 
+  createUser, login, getProfile, getUsers,
+  getPosts, myPosts, createPost, updatePost, deletePost
+}
