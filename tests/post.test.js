@@ -119,5 +119,5 @@ test('Should be able to delete second post', async () => {
   const { data } = await client.mutate({ mutation: deletePost })
   const exists = await prisma.exists.Post({ id: data.deletePost.id })
 
-  expect(exists).toBe(false)
+  expect(exists).toBe(false);
 });
