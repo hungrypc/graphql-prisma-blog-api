@@ -1,9 +1,8 @@
 import 'cross-fetch/polyfill'
 import prisma from '../src/prisma'
-import seedDatabase, { userOne, userTwo, commentOne, commentTwo } from './utils/seedDatabase'
+import seedDatabase, { userOne, userTwo, commentOne, commentTwo, postTwo } from './utils/seedDatabase'
 import getClient from './utils/getClient'
-import { deleteComment } from './utils/operations'
-
+import { deleteComment, subscribeToComments } from './utils/operations'
 
 const client = getClient()
 
@@ -15,8 +14,8 @@ test('Should delete own comment', async () => {
     id: commentOne.comment.id
   }
 
-  const { data } = await client.mutate({ mutation: deleteComment, variables })
-  const exists = await prisma.exists.Comment({ id: data.deleteComment.id })
+  await client.mutate({ mutation: deleteComment, variables })
+  const exists = await prisma.exists.Comment({ id: commentOne.comment.id })
 
   expect(exists).toBe(false)
 })
@@ -28,4 +27,19 @@ test('Should not delete other users comment', async () => {
   }
 
   await expect(client.mutate({ mutation: deleteComment, variables })).rejects.toThrow()
+})
+
+test('Should subscribe to comments for a post', async (done) => {
+  const variables = {
+    postId: postTwo.post.id
+  }
+
+  client.subscribe({ query: subscribeToComments, variables }).subscribe({
+    next(response) {
+      expect(response.data.comment.mutation).toBe('DELETED')
+      done()
+    }
+  })
+
+  await prisma.mutation.deleteComment({ where: { id: commentTwo.comment.id }})
 })
