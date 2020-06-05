@@ -133,4 +133,9 @@ const seedDatabase = async () => {
   })
 }
 
-export { seedDatabase as default, userOne, postOne, postTwo }
+export { 
+  seedDatabase as default, 
+  userOne, userTwo, 
+  postOne, postTwo, 
+  commentOne, commentTwo 
+}

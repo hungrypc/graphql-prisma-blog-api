@@ -8,7 +8,6 @@ const client = getClient()
 
 beforeEach(seedDatabase)
 
-
 test('Should create a new user', async () => {
   const variables = {
     data: {
